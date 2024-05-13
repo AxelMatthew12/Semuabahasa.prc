@@ -1,4 +1,4 @@
--- Active: 1714363170761@@127.0.0.1@3306@penjadwalankuliah
+-- Active: 1714363170761@@127.0.0.1@3306@sistemakademik
 CREATE DATABASE Penjadwalankuliah;
 USE Penjadwalankuliah;
 
@@ -814,9 +814,12 @@ SELECT * FROM mk
 CREATE TABLE mahasiswa (
     nim VARCHAR(100) DEFAULT NULL,
     nama_mahasiswa VARCHAR(100) NOT NULL,
-    kode_kelas VARCHAR(100) NOT NULL
+    kode_kelas VARCHAR(100) NOT NULL,
+    kode_dosen VARCHAR(100) NOT NULL
 );
 
+ALTER TABLE mahasiswa
+ADD FOREIGN KEY 
 
 SELECT * FROM mahasiswa
 
@@ -824,18 +827,109 @@ ALTER TABLE mahasiswa
  ADD PRIMARY KEY (nim);
 
  ALTER TABLE mahasiswa 
- ADD FOREIGN KEY (kode_kelas) REFERENCES kelas (kode_kelas);
+ ADD FOREIGN KEY 
 
  SELECT * FROM kelas;
 
- INSERT INTO mahasiswa (nim, nama_mahasiswa,kode_kelas) VALUES 
- ('2341760096','Aqueena Regita Hapsari', '20240404'),
-('2341760001','Axelo Matthew Terang Barus', '20240404'),
-('2341760187','Deanissa Sherly Sabilla', '20240404' ),
-('2341760070','Diajeng Sekar Arum', '20240404' ),
-('2341760101','Fransiska Widya Krisanti', '20240404'),
-('2341760129','Gilang Andika', '20240404'),
-('2341760183','Intan Firdausi', '20240404'),
-('2341760080','Johnatan David Gersom', '20240404'),
-('2341760064','Josephine Antonio', '20240404'),
-('2341760193','Keysha Arindra Fabian', '20240404');
+ DROP TABLE mahasiswa;
+
+ ALTER TABLE mahasiswa
+ ADD FOREIGN KEY (kode_kelas) REFERENCES kelas (kode_kelas),
+ ADD FOREIGN KEY(kode_dosen) REFERENCES dosen (kode_dosen);
+
+
+
+ INSERT INTO mahasiswa VALUES 
+ ('2341760096','Aqueena Regita Hapsari', '2021010102','D030'),
+('2341760001','Axelo Matthew Terang Barus', '2021010102','D030'),
+('2341760187','Deanissa Sherly Sabilla', '2021010102','D030' ),
+('2341760070','Diajeng Sekar Arum', '2021010102','D030' ),
+('2341760101','Fransiska Widya Krisanti', '2021010102','D030'),
+('2341760129','Gilang Andika', '2021010102','D030'),
+('2341760183','Intan Firdausi', '2021010102','D030'),
+('2341760080','Johnatan David Gersom', '2021010102','D030'),
+('2341760064','Josephine Antonio', '2021010102','D030'),
+('2341760193','Keysha Arindra Fabian', '2021010102','D030');
+
+SELECT * FROM dosen
+
+UPDATE dosen
+SET kode_dosen = 'D'
+
+SELECT * FROM jadwal
+
+SELECT * FROM prodi
+
+SHOW TABLES
+
+SELECT * FROM kelas
+
+
+SELECT * FROM ruang
+
+SELECT * FROM hari
+
+SELECT * FROM jp
+
+SELECT deskripsi_ruang
+FROM ruang
+WHERE nama_ruang = 'LKJ1';
+
+SELECT DISTINCT kode_hari
+FROM jadwal;
+
+SELECT *
+FROM ruang
+WHERE nama_ruang IN ('RT01','RT10');
+
+SELECT *
+FROM ruang
+WHERE nama_ruang 
+BETWEEN '0501' AND '0508';
+
+SELECT *
+FROM dosen
+WHERE nama_dosen LIKE 'E%';
+
+SELECT kode_dosen , kode_mk, kode_ruang, kode_hari 
+FROM jadwal
+GROUP BY kode_hari;
+
+SELECT kode_jp, jp_mulai
+FROM jp
+ORDER BY jp_mulai;
+
+SELECT * 
+FROM jadwal
+WHERE kode_hari = '001' AND jp_mulai=1;
+
+SELECT kode_hari
+FROM hari
+UNION ALL
+SELECT kode_hari FROM jadwal;
+
+SELECT kode_dosen, kode_mk, kode_hari, jp_mulai, jp_selesai
+FROM jadwal
+WHERE jp_selesai
+IN (SELECT MAX(jp_selesai)FROM jadwal);
+
+SELECT kode_dosen, kode_mk,kode_hari, jp_mulai,jp_selesai
+FROM jadwal
+WHERE jp_selesai < ALL
+(SELECT jp_selesai FROM jadwal WHERE jp_selesai=6);
+
+SELECT AVG(jp_selesai-jp_mulai) FROM jadwal;
+
+SELECT MAX(jp_mulai)FROM jadwal;
+SELECT MIN (jp_selesai) FROM jadwal;
+SELECT SUM(jp_selesai-jp_mulai) FROM jadwal WHERE kode_dosen='D001';
+
+SELECT * FROM jadwal WHERE kode_dosen='D001';
+
+SELECT COUNT (kode_ruang) FROM ruang;
+
+SELECT *
+FROM jadwal
+WHERE kode_jadwal='4' AND jp_mulai=8;
+
+SELECT * FROM jadwal
